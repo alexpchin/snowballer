@@ -20,4 +20,9 @@ io.on('connection', function(client) {
     players.push(player);
     client.broadcast.emit('joined', player);
   });
+
+  client.on('playerMove', function(player) {
+    console.log("move", player);
+    client.broadcast.emit("playerMove", player);
+  });
 });

@@ -1,4 +1,5 @@
-function Player(name, id, isLocal){
+function Player(name, id, isLocal, socket){
+  this.socket = socket;
   this.name = name;
   this.id = id;
   this.character = $('<div id="' + this.id + '" class="character"></div>');
@@ -43,6 +44,8 @@ Player.prototype.keyup = function(e){
 }
   
 Player.prototype.move = function(direction) {
+  window.socket.emit('playerMove', { id: this.id, direction: direction });
+
   // a player could switch key mid-animation
   // records the key that was down when animation started
   var currentKeyCheck = this.currentKey;
