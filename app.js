@@ -9,7 +9,7 @@ var server = app.listen(8000, function() {
 });
 
 var io = require('socket.io')(server);
-var players = [];
+var players = {};
 
 io.on('connection', function(client) {
 	console.log('User connected', players);
@@ -17,7 +17,7 @@ io.on('connection', function(client) {
 
   client.on('newPlayer', function(player) {
     console.log("newPlayer");
-    players.push(player);
+    players[player.id] = player;
     client.broadcast.emit('joined', player);
   });
 
@@ -25,4 +25,14 @@ io.on('connection', function(client) {
     console.log("move", player);
     client.broadcast.emit("playerMove", player);
   });
+
+  client.on('playerStop', function(playerId) {
+    console.log("stop", playerId);
+    client.broadcast.emit("playerStop", playerId);
+  });
+
+  client.on('leaveGame', function(playerId) {
+    delete players[playerId];
+    client.broadcast.emit("left", playerId);
+  })
 });
