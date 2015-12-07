@@ -12,33 +12,34 @@ var io = require('socket.io')(server);
 var players = {};
 
 io.on('connection', function(client) {
-	// console.log('User connected', players);
   client.emit('players', players);
+  client.on('newPlayer', newPlayer);
+  client.on('playerMove', playerMove);
+  client.on('playerStop', playerStop);
+  client.on('updatePosition', updatePosition)
+  client.on('leaveGame', leaveGame)
 
-  client.on('newPlayer', function(player) {
-    // console.log("newPlayer");
+  function newPlayer(player) {
     players[player.id] = player;
     client.broadcast.emit('joined', player);
-  });
+  }
 
-  client.on('playerMove', function(player) {
-    // console.log("move", player); 
+  function playerMove(player) {
     players[player.id] = player;
-    client.broadcast.emit("playerMove", player);
-  });
+    return client.broadcast.emit("playerMove", player);
+  }
 
-  client.on('playerStop', function(playerId) {
-    // console.log("stop", playerId);
-    client.broadcast.emit("playerStop", playerId);
-  });
+  function playerStop(playerId) {
+    return client.broadcast.emit("playerStop", playerId);
+  }
 
-  client.on('updatePosition', function(player){
-    console.log(player.x, player.y, player.classList);
-    players[player.id] = player;
-  })
+  function updatePosition(player){
+    return players[player.id] = player;
+  }
 
-  client.on('leaveGame', function(playerId) {
-    // delete players[playerId];
-    client.broadcast.emit("left", playerId);
-  })
+  function leaveGame(playerId) {
+    delete players[playerId];
+    return client.broadcast.emit("left", playerId);
+  }
 });
+

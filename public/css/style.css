@@ -1,62 +1,134 @@
+body {
+  font-family: 'Cutive Mono';
+}
+
+/*typography*/
+
+h1 {
+  margin-bottom: 20px;
+  font-size: 30px;
+}
+
+h2 {
+  margin-bottom: 15px;
+}
+
+.strong {
+  font-weight: bold;
+}
+
+/*form*/
+
+#form {
+  width: 500px;
+  margin: 30px auto;
+  text-align: center;
+  clear: both;
+}
+
+.character-form {
+  width: 65px;
+  display: inline-block;
+}
+
+label > input {
+  visibility: hidden;
+  position: absolute;
+}
+
+label > input + img {
+  cursor: pointer;
+  border: 2px solid transparent;
+  padding: 5px;
+}
+
+label > input:checked + img {
+  border: 2px solid black;
+}
+
+#stage {
+  position: relative;
+  width: 320px;
+  height: 480px;
+  margin: auto auto;
+  border: solid 2px #000;
+  overflow: hidden;
+}
+
+/*sprites*/
+
 .character {
   position: absolute;
+  z-index: 1;
+  display: none;
+}
+
+.character::after {
+  content: attr(alt);
+  position: absolute;
+  bottom: -18px;
+  font-size: 12px;
+  color: white;
+  background: black;
+  border-radius: 3px;
+  padding: 2px 3px;
+}
+
+.alex {
   top: 0px;
   left: 0px;
   width: 35px;
   height: 34px;
-  z-index: 1;
   background: url('/images/alex.png') no-repeat;
-  display: none;
 }
 
-.character.front-right { background-position: -152px -14px; }
-.character.front-stand { background-position: -7px -14px; }
-.character.front-left { background-position: -53px -14px; }
-
-.character.left-right { background-position: -50px -63px; }
-.character.left-stand { background-position: -3px -63px; }
-.character.left-left { background-position: -149px -63px; }
-
-.character.right-right { background-position: -155px -159px; }
-.character.right-stand { background-position: -10px -159px; }
-.character.right-left { background-position: -56px -159px; }
-
-.character.back-right { background-position: -153px -110px; }
-.character.back-stand { background-position: -8px -110px; }
-.character.back-left { background-position: -54px -110px; }
-
-/*.character {
-  position: absolute;
+.gerry {
   top: 192px;
   left: 128px;
   width: 44px;
   height: 34px;
-  z-index: 1;
   background: url('/images/gerry.png') no-repeat;
 }
 
-.character.front-right { background-position: -156px -9px; }
-.character.front-stand { background-position: -11px -9px; }
-.character.front-left { background-position: -57px -9px; }
+.snowball {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 8px;
+  height: 8px;
+  z-index: 2;
+  background: url('/images/snowball.png') no-repeat;
+  display: none;
+}
 
-.character.left-right { background-position: -151px -58px; }
-.character.left-stand { background-position: -6px -58px; }
-.character.left-left { background-position: -52px -58px; }
+.alex.front-right { background-position: -152px -14px; }
+.alex.front-stand { background-position: -7px -14px; }
+.alex.front-left { background-position: -53px -14px; }
 
-.character.right-right { background-position: -149px -154px; }
-.character.right-stand { background-position: -4px -154px; }
-.character.right-left { background-position: -49px -154px; }
+.alex.left-right { background-position: -50px -63px; }
+.alex.left-stand { background-position: -3px -63px; }
+.alex.left-left { background-position: -149px -63px; }
 
-.character.back-right { background-position: -156px -105px; }
-.character.back-stand { background-position: -11px -105px; }
-.character.back-left { background-position: -57px -105px; }*/
+.alex.right-right { background-position: -155px -159px; }
+.alex.right-stand { background-position: -10px -159px; }
+.alex.right-left { background-position: -56px -159px; }
 
-/*Stage*/
-#stage {
-    position: relative;
-    width: 320px;
-    height: 480px;
-    margin: auto auto;
-    border: solid 2px #000;
-    overflow: hidden;
-  }
+.alex.back-right { background-position: -153px -110px; }
+.alex.back-stand { background-position: -8px -110px; }
+.alex.back-left { background-position: -54px -110px; }
+
+.gerry.front-right { background-position: -156px -9px; }
+.gerry.front-stand { background-position: -11px -9px; }
+.gerry.front-left { background-position: -57px -9px; }
+
+.gerry.left-right { background-position: -151px -58px; }
+.gerry.left-stand { background-position: -6px -58px; }
+.gerry.left-left { background-position: -52px -58px; }
+
+.gerry.right-right { background-position: -149px -154px; }
+.gerry.right-stand { background-position: -4px -154px; }
+.gerry.right-left { background-position: -49px -154px; }
+
+.gerry.back-right { background-position: -156px -105px; }
+.gerry.back-stand { background-position: -11px -105px; }
+.gerry.back-left { background-position: -57px -105px; }

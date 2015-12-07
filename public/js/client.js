@@ -1,23 +1,34 @@
+$(function(){
+  $("form#chooseCharacter").on("submit", choosePlayer);
+});
+
+function choosePlayer(){
+  event.preventDefault();
+  var team = $(this).find("input[type=radio][name=character]:checked").val();
+  var name = $(this).find("input[name=name]").val();
+  localPlayer = new Player(name, team, localPlayer.socketId, true);
+  socket.emit('newPlayer', localPlayer);
+  $("#chooseCharacter").empty();
+}
+
 var socket = io.connect('http://b27f3cac.ngrok.io/');
 
 var _players = {};
 var localPlayer = {};
 
 socket.on('connect', function(){
-  var socketId = socket.io.engine.id;
-  localPlayer = new Player("Mike", socketId, true);
-  socket.emit('newPlayer', localPlayer);
+  localPlayer.socketId = socket.io.engine.id;
 });
 
 socket.on('players', function(players) {
   console.log("playaz", players);
-  // debugger
   Object.keys(players).forEach(function(id){
     var name = players[id].name;
     var x    = players[id].x;
     var y    = players[id].y;
+    var team = players[id].team;
     var classList = players[id].classList
-    _players[id] = new Player(name, id, false, x, y, classList);
+    _players[id] = new Player(name, team, id, false, x, y, classList);
   });
 });
 
@@ -26,8 +37,9 @@ socket.on('joined', function(player) {
   var id   = player.id;
   var x    = player.x;
   var y    = player.y;
+  var team = player.team;
   var classList = player.classList
-  _players[player.id] = new Player(name, id, false, x, y, classList);
+  _players[player.id] = new Player(name, team, id, false, x, y, classList);
 });
 
 socket.on('left', function(playerId) {
