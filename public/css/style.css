@@ -1,3 +1,11 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+  min-height: 100%;
+  min-width: 100%;
+}
+
 body {
   font-family: 'Cutive Mono';
 }
@@ -24,7 +32,7 @@ p {
 /*form*/
 
 #form {
-  max-width: 320px;
+  width: 100%;
   margin: 30px auto;
   text-align: center;
   clear: both;
@@ -69,6 +77,8 @@ label > input + img {
   cursor: pointer;
   border: 1px solid transparent;
   padding: 5px;
+  height: 50px;
+  width: 50px;
 }
 
 label > input:checked + img {
@@ -79,9 +89,9 @@ label > input:checked + img {
 
 #stage {
   position: relative;
-  max-width: 320px;
+  max-width: 100%;
   height: 480px;
-  margin: auto auto;
+  margin: 0 20px;
   border: solid 1px #000;
   overflow: hidden;
 }

@@ -1,6 +1,6 @@
 function Ball(x, y, direction) {
-  this.x         = parseInt(x)+10 + "px";
-  this.y         = parseInt(y)+10 + "px";
+  this.x         = parseInt(x) + "px";
+  this.y         = parseInt(y) + "px";
   this.direction = direction;
   this.$ball     = $("<div class='snowball'></div>");
   this.$stage    = $("#stage");
@@ -38,9 +38,7 @@ function Ball(x, y, direction) {
           parseInt(bally) <= parseInt(y)+15 &&
           parseInt(bally) >= parseInt(y)-15) {
         return $(this)
-          .css("background-image", "url('/images/splat.png')")
-          .css("width", "14px")
-          .css("height", "14px");
+          .css("background-image", "url('/images/splat.png')", "width", "14px", "height", "14px");
           console.log("HIT");
       }
     });

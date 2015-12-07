@@ -6,12 +6,12 @@ function Player(name, team, id, isLocal, x, y, classList){
   this.classList = classList || "character front-stand";
   this.currentKey;
   this.charStep;
-  this.x         = x || 0; // Will be random
-  this.y         = y || 0; // Will be random
+  this.stage     = $('#stage');
+  this.x         = x || Math.random()*this.stage.width()/2;
+  this.y         = y || Math.random()*this.stage.height()/2;
   this.charStep  = 2; 
   this.charSpeed = 400;
   this.hp        =
-  this.stage     = $('#stage');
   this.init();
   if (isLocal) this.bindEvents();
 }
@@ -66,9 +66,6 @@ Player.prototype.throwBall = function(){
   return window.socket.emit('ballThrown', ball);
 }
 
-// Prevent movement if player is:
-// - pushing other buttons
-// - only stop the walk if the key that started the walk is released
 Player.prototype.keyup = function(){
   window.socket.emit('playerStop', this);
   this.stop();
@@ -82,84 +79,47 @@ Player.prototype.move = function(direction, keyCode) {
   // a player could switch key mid-animation
   // records the key that was down when animation started
   this.currentKey = keyCode;
-  var currentKeyCheck = this.currentKey;
-    
-  // adjust from lang to code
-  if (keyCode == 38) direction = "back";
-  if (keyCode == 40) direction = "front";
+  if (keyCode == 38) direction = "back"; // keyCode -> english
+  if (keyCode == 40) direction = "front"; // keyCode -> english
     
   this.charStep++;
-  if (this.charStep == 5) this.charStep = 1;
-    
-  // remove the current class
-  this.character.attr('class',  this.team + ' character');
-    
+  if (this.charStep == 5) this.charStep = 1; // There are 4 states for the sprite
+  this.character.attr('class',  this.team + ' character'); // reset the current class
+  this.makeSteps(direction);
+  this.makeMoves(direction);
+}
+
+Player.prototype.animatePlayer = function(animation, direction, currentKeyCheck){
+  var player = this;
+  this.character.animate(animation, this.charSpeed, "linear", function() {
+    if (player.currentKey == currentKeyCheck) player.move(direction);
+    player.x = player.character.css("left");
+  });
+}
+
+Player.prototype.makeSteps = function(direction) {
   // Add the new class depending on the number of steps
   switch (this.charStep) {
-    case 1: 
-      this.character.addClass(direction+'-stand');
-      this.step(direction, '-right', (this.charSpeed/3))
-      this.step(direction, '-stand', ((this.charSpeed/3)*2))
+    case 1:
+      return this.walk(direction, '-stand', '-right', '-stand');
       break;
     case 2: 
-      this.character.addClass(direction+'-right');
-      this.step(direction, '-stand', (this.charSpeed/3))
-      this.step(direction, '-left', ((this.charSpeed/3)*2))
+      return this.walk(direction, '-right', '-stand', '-left');
       break;
     case 3: 
-      this.character.addClass(direction+'-stand');
-      this.step(direction, '-left', (this.charSpeed/3))
-      this.step(direction, '-stand', ((this.charSpeed/3)*2))
+      return this.walk(direction, '-stand', '-left', '-stand');
       break;
     case 4: 
-      this.character.addClass(direction+'-left');
-      this.step(direction, '-stand', (this.charSpeed/3))
-      this.step(direction, '-right', ((this.charSpeed/3)*2))
+      return this.walk(direction, '-left', '-stand', '-right');
       break;
   }
-  
-  // Actually move the character
-  var player = this;
-  switch(direction) {
-    case 'front':
-      player.character.animate({
-        top: '+=32'
-      }, player.charSpeed, "linear", function() {
-        if (player.currentKey == currentKeyCheck) player.move(direction);
-        player.y = player.character.css("top");
-      });
-      break;
-    case 'back':
-      if (player.character.position().top > 0) {
-        player.character.animate({
-          top: '-=32'
-        }, player.charSpeed, "linear", function() {
-          if (player.currentKey == currentKeyCheck) player.move(direction);
-          player.y = player.character.css("top");
-        });
-      }
-      break;
-    case 'left':
-      if (player.character.position().left > 0) {
-        player.character.animate({
-          left: '-=32'
-        }, player.charSpeed, "linear", function() {
-          if (player.currentKey == currentKeyCheck) player.move(direction);
-          player.x = player.character.css("left");
-        });
-      }
-      break;
-    case 'right':
-      player.character.animate({
-        left: '+=32'
-      }, player.charSpeed, "linear", function() {
-        if (player.currentKey == currentKeyCheck) player.move(direction);
-        player.x = player.character.css("left");
-      });
-      break;
-  }
+}
 
-  return window.socket.emit('updatePosition', player);
+Player.prototype.walk = function(d1, d2, d2, d4){
+  this.character.addClass(d1+d2);
+  this.step(d1, d2, (this.charSpeed/3));
+  this.step(d1, d4, ((this.charSpeed/3)*2));
+  return false;
 }
 
 Player.prototype.step = function(direction, side, speed){
@@ -179,4 +139,30 @@ Player.prototype.step = function(direction, side, speed){
     self.x = self.character.css("left");
     window.socket.emit('updatePosition', self);
   }, speed);
+}
+
+Player.prototype.makeMoves = function(direction){
+  // Actually move the character
+  var player = this;
+  var currentKeyCheck = this.currentKey;
+  switch(direction) {
+    case 'front':
+      return player.animatePlayer({top: '+=32'}, direction, currentKeyCheck);
+      break;
+    case 'back':
+      if (player.character.position().top > 0) {
+        return player.animatePlayer({top: '-=32'}, direction, currentKeyCheck);
+      }
+      break;
+    case 'left':
+      if (player.character.position().left > 0) {
+        return player.animatePlayer({left: '-=32'}, direction, currentKeyCheck);
+      }
+      break;
+    case 'right':
+      return player.animatePlayer({left: '+=32'}, direction, currentKeyCheck);
+      break;
+  }
+
+  return window.socket.emit('updatePosition', player);
 }
