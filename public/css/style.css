@@ -24,7 +24,7 @@ p {
 /*form*/
 
 #form {
-  width: 500px;
+  max-width: 320px;
   margin: 30px auto;
   text-align: center;
   clear: both;
@@ -79,7 +79,7 @@ label > input:checked + img {
 
 #stage {
   position: relative;
-  width: 320px;
+  max-width: 320px;
   height: 480px;
   margin: auto auto;
   border: solid 1px #000;

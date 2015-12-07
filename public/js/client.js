@@ -1,62 +1,72 @@
 $(function(){
   $("form#chooseCharacter").on("submit", choosePlayer);
+  $('input[name=character]').on("change", showNameInput);
 });
 
-  function choosePlayer(){
-    event.preventDefault();
-    var team = $(this).find("input[type=radio][name=character]:checked").val();
-    var name = $(this).find("input[name=name]").val();
-    localPlayer = new Player(name, team, localPlayer.socketId, true);
-    socket.emit('newPlayer', localPlayer);
-    $("#chooseCharacter").empty();
+function showNameInput(){
+  if ($("input[type=radio][name=character]:checked")) {
+    return $(".enter-name").show();
   }
+}
 
-  var socket = io.connect('http://b27f3cac.ngrok.io/');
+function choosePlayer(){
+  event.preventDefault();
+  var team = $(this).find("input[type=radio][name=character]:checked").val();
+  var name = $(this).find("input[name=name]").val();
+  localPlayer = new Player(name, team, localPlayer.socketId, true);
+  socket.emit('newPlayer', localPlayer);
+  $("#chooseCharacter").empty();
+}
 
-  var _players = {};
-  var localPlayer = {};
+var socket = io.connect('http://b27f3cac.ngrok.io/');
 
-  socket.on('connect', function(){
-    localPlayer.socketId = socket.io.engine.id;
+var _players = {};
+var localPlayer = {};
+
+socket.on('connect', function(){
+  localPlayer.socketId = socket.io.engine.id;
+});
+
+socket.on('players', function(players) {
+  Object.keys(players).forEach(function(id){
+    var name = players[id].name;
+    var x    = players[id].x;
+    var y    = players[id].y;
+    var team = players[id].team;
+    var classList = players[id].classList
+    _players[id] = new Player(name, team, id, false, x, y, classList);
   });
+});
 
-  socket.on('players', function(players) {
-    console.log("playaz", players);
-    Object.keys(players).forEach(function(id){
-      var name = players[id].name;
-      var x    = players[id].x;
-      var y    = players[id].y;
-      var team = players[id].team;
-      var classList = players[id].classList
-      _players[id] = new Player(name, team, id, false, x, y, classList);
-    });
+socket.on('joined', function(player) {
+  var name = player.name;
+  var id   = player.id;
+  var x    = player.x;
+  var y    = player.y;
+  var team = player.team;
+  var classList = player.classList
+  _players[player.id] = new Player(name, team, id, false, x, y, classList);
+});
+
+socket.on('left', function(playerId) {
+  $("#"+playerId).fadeOut(function(){
+    $(this).remove();
   });
+  delete _players[playerId];
+})
 
-  socket.on('joined', function(player) {
-    var name = player.name;
-    var id   = player.id;
-    var x    = player.x;
-    var y    = player.y;
-    var team = player.team;
-    var classList = player.classList
-    _players[player.id] = new Player(name, team, id, false, x, y, classList);
-  });
+socket.on('playerMove', function(data){
+  _players[data.id].move(data.direction, data.keyCode);
+})
 
-  socket.on('left', function(playerId) {
-    $("#"+playerId).fadeOut(function(){
-      $(this).remove();
-    });
-    delete _players[playerId];
-  })
+socket.on('playerStop', function(player){
+  _players[player.id].stop();
+})
 
-  socket.on('playerMove', function(data){
-    _players[data.id].move(data.direction, data.keyCode);
-  })
+socket.on('ballThrown', function(ball){
+  new Ball(ball.x, ball.y, ball.direction);
+})
 
-  socket.on('playerStop', function(player){
-    _players[player.id].stop();
-  })
-
-  $(window).on('beforeunload', function(){
-    socket.emit('leaveGame', localPlayer.id);
-  });
+$(window).on('beforeunload', function(){
+  socket.emit('leaveGame', localPlayer.id);
+});

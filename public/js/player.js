@@ -59,11 +59,11 @@ Player.prototype.getDirection = function(){
 }
 
 Player.prototype.throwBall = function(){
-  var ball = $("<div class='snowball'></div>");
   var x = parseInt(this.x)+10 + "px";
   var y = parseInt(this.y)+10 + "px";
-  var direction;
+  var direction = this.getDirection(this.classList);
 
+<<<<<<< HEAD
   switch (this.getDirection(this.classList)) {
     case "front":
       direction = { top: "+=100" };
@@ -100,17 +100,11 @@ Player.prototype.throwBall = function(){
       }
     });
   });
+=======
+  var ball = new Ball(x, y, direction);
+  return window.socket.emit('ballThrown', ball);
+>>>>>>> 0c772ddd2803bd62bdc20b130f5f6944eb320339
 }
-
-// function isCollide(a, b) {
-//     return !(
-//         ((a.y + a.height) < (b.y)) ||
-//         (a.y > (b.y + b.height)) ||
-//         ((a.x + a.width) < b.x) ||
-//         (a.x > (b.x + b.width))
-//     );
-// }
-
 
 // Prevent movement if player is:
 // - pushing other buttons
@@ -220,7 +214,6 @@ Player.prototype.step = function(direction, side, speed){
     
     var classList = self.character.attr("class");
     self.classList = classList;
-    console.log(classList);
 
     self.y = self.character.css("top");
     self.x = self.character.css("left");
