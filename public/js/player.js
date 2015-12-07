@@ -4,7 +4,7 @@ $(function() {
 
 function Player(name){
   this.name = name;
-  this.character  = $("#character");
+  this.character  = $("#you");
   this.currentKey;
   this.charStep;
   this.charStep = 2; 
@@ -55,8 +55,7 @@ Player.prototype.move = function(direction) {
   if (this.charStep == 5) this.charStep = 1;
     
   // remove the current class
-  this.character.removeAttr('class');
-  // this.character.addClass("character");
+  this.character.attr('class', 'character');
     
   // Add the new class depending on the number of steps
   switch (this.charStep) {
@@ -121,7 +120,7 @@ Player.prototype.step = function(direction, side, speed){
     self.charStep++;
     if (self.charStep == 5) self.charStep = 1;
 
-    self.character.removeAttr('class');
+    self.character.attr('class', 'character');
     self.character.addClass(direction + side);
     console.log(self);
   }, speed);
