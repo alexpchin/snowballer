@@ -62,48 +62,8 @@ Player.prototype.throwBall = function(){
   var x = parseInt(this.x)+10 + "px";
   var y = parseInt(this.y)+10 + "px";
   var direction = this.getDirection(this.classList);
-
-<<<<<<< HEAD
-  switch (this.getDirection(this.classList)) {
-    case "front":
-      direction = { top: "+=100" };
-      break;
-    case "back":
-      direction = { top: "-=100" };
-      break;
-    case "left":
-      direction = { left: "-=100" };
-      break;
-    case "right":
-      direction = { left: "+=100" };
-      break;
-  }
-
-  ball.css("left", x).css("top", y);
-  this.stage.append(ball);
-  ball.show().animate(direction, 600, "linear", function() {
-    $(this).css({"background": "url('/images/splat.png') no-repeat", "width": "14px", "height": "14px"});
-    $(this).fadeOut();
-    var ballx = $(this).css("left");
-    var bally = $(this).css("top");
-    var ball  = this;
-
-    Object.keys(_players).forEach(function(id) {
-      var x = _players[id].x;
-      var y = _players[id].y;
-
-      if (parseInt(ballx) <= parseInt(x)+15 &&
-          parseInt(ballx) >= parseInt(x)-15 &&
-          parseInt(bally) <= parseInt(y)+15 &&
-          parseInt(bally) >= parseInt(y)-15) {
-        alert("hit");
-      }
-    });
-  });
-=======
   var ball = new Ball(x, y, direction);
   return window.socket.emit('ballThrown', ball);
->>>>>>> 0c772ddd2803bd62bdc20b130f5f6944eb320339
 }
 
 // Prevent movement if player is:
