@@ -58,58 +58,64 @@ Player.prototype.getDirection = function(){
   return this.classList.match(/front-|right-|left-|back-/)[0].replace("-", "");
 }
 
-Player.prototype.throwBall = function(){
-  var ball = $("<div class='snowball'></div>");
-  var x = parseInt(this.x)+10 + "px";
-  var y = parseInt(this.y)+10 + "px";
-  var direction;
+function Ball(x, y, direction) {
+  this.x         = parseInt(x)+10 + "px";
+  this.y         = parseInt(y)+10 + "px";
+  this.direction = direction;
+  this.$ball     = $("<div class='snowball'></div>");
+  this.$stage    = $("#stage");
+  var animation;
 
-  switch (this.getDirection(this.classList)) {
+  switch (this.direction) {
     case "front":
-      direction = { top: "+=100" };
+      animation = { top: "+=100" };
       break;
     case "back":
-      direction = { top: "-=100" };
+      animation = { top: "-=100" };
       break;
     case "left":
-      direction = { left: "-=100" };
+      animation = { left: "-=100" };
       break;
     case "right":
-      direction = { left: "+=100" };
+      animation = { left: "+=100" };
       break;
   }
 
-  ball.css("left", x).css("top", y);
-  this.stage.append(ball);
-  ball.show().animate(direction, 600, "linear", function() {
-    $(this).fadeOut();
+  this.$ball.css("left", x).css("top", y);
+  this.$stage.append(this.$ball);
+  var ball = this;
+
+  this.$ball.show().animate(animation, 600, "linear", function() {
     var ballx = $(this).css("left");
     var bally = $(this).css("top");
-    var ball  = this;
 
-    Object.keys(_players).forEach(function(id) {
-      var x = _players[id].x;
-      var y = _players[id].y;
+    console.log("ball ", this);
+    $(this).css("height", "20px").css("width", "20px").css("background-image", "url('/images/explosion.png')");
 
-      if (parseInt(ballx) <= parseInt(x)+15 &&
-          parseInt(ballx) >= parseInt(x)-15 &&
-          parseInt(bally) <= parseInt(y)+15 &&
-          parseInt(bally) >= parseInt(y)-15) {
-        alert("hit");
-      }
-    });
+    // Object.keys(_players).forEach(function(id) {
+    //   var x = _players[id].x;
+    //   var y = _players[id].y;
+
+    //   if (parseInt(ballx) <= parseInt(x)+15 &&
+    //       parseInt(ballx) >= parseInt(x)-15 &&
+    //       parseInt(bally) <= parseInt(y)+15 &&
+    //       parseInt(bally) >= parseInt(y)-15) {
+    //     return this.$ball.css("background-image", "url('/images/explosion.png')");
+    //   }
+    // });
+
+    
   });
 }
 
-// function isCollide(a, b) {
-//     return !(
-//         ((a.y + a.height) < (b.y)) ||
-//         (a.y > (b.y + b.height)) ||
-//         ((a.x + a.width) < b.x) ||
-//         (a.x > (b.x + b.width))
-//     );
-// }
+Player.prototype.throwBall = function(){
+  var x = parseInt(this.x)+10 + "px";
+  var y = parseInt(this.y)+10 + "px";
+  var direction = this.getDirection(this.classList);
 
+  var ball = new Ball(x, y, direction);
+  return window.socket.emit('ballThrown', ball);
+}
 
 // Prevent movement if player is:
 // - pushing other buttons

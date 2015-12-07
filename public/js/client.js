@@ -57,6 +57,11 @@ socket.on('playerStop', function(player){
   _players[player.id].stop();
 })
 
+socket.on('ballThrown', function(ball){
+  console.log("Thrown");
+  new Ball(ball.x, ball.y, ball.direction);
+})
+
 $(window).on('beforeunload', function(){
   socket.emit('leaveGame', localPlayer.id);
 });

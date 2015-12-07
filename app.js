@@ -16,6 +16,7 @@ io.on('connection', function(client) {
   client.on('newPlayer', newPlayer);
   client.on('playerMove', playerMove);
   client.on('playerStop', playerStop);
+  client.on('ballThrown', ballThrown);
   client.on('updatePosition', updatePosition)
   client.on('leaveGame', leaveGame)
 
@@ -35,6 +36,12 @@ io.on('connection', function(client) {
 
   function updatePosition(player){
     return players[player.id] = player;
+  }
+
+  function ballThrown(ball){
+    console.log("Ball thrown.")
+    console.log(ball)
+    return client.broadcast.emit("ballThrown", ball);
   }
 
   function leaveGame(playerId) {
