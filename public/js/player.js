@@ -82,6 +82,9 @@ Player.prototype.throwBall = function(){
   ball.css("left", x).css("top", y);
   this.stage.append(ball);
   ball.show().animate(direction, 600, "linear", function() {
+    $(this).css("background", "url('/images/splat.png') no-repeat");
+    $(this).css("width", "14px");
+    $(this).css("height", "14px");
     $(this).fadeOut();
     var ballx = $(this).css("left");
     var bally = $(this).css("top");
