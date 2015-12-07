@@ -291,12 +291,8 @@ Tank.prototype = {
 					t.dir[0] = 0;
 					break;
 			}
-		}).mousemove( function(e){ //Detect mouse for aiming
-			var mx = event.pageX - t.$arena.offset().left;
-			var my = event.pageY - t.$arena.offset().top;
-			t.setCannonAngle(mx, my);
-		}).click( function(){
-			t.shoot();
+		}).keydown( function(event){
+			if(event.keyCode === '32') t.shoot();
 		});
 
 	},
