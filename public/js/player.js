@@ -1,20 +1,20 @@
-$(function() {
-  var you = new Player("Alex")
-});
-
-function Player(name){
+function Player(name, id, isLocal){
   this.name = name;
-  this.character  = $("#you");
+  this.id = id;
+  this.character = $('<div id="' + this.id + '" class="character"></div>');
   this.currentKey;
   this.charStep;
   this.charStep = 2; 
   this.charSpeed = 400;
+  this.stage = $('#stage');
   this.init();
+  if(isLocal) this.bindEvents();
 }
 
 Player.prototype.init = function(){
+  console.log("init");
+  this.stage.append(this.character);
   this.character.addClass('front-stand');
-  this.bindEvents();
 }
 
 Player.prototype.bindEvents = function(){
@@ -122,6 +122,5 @@ Player.prototype.step = function(direction, side, speed){
 
     self.character.attr('class', 'character');
     self.character.addClass(direction + side);
-    console.log(self);
   }, speed);
 }

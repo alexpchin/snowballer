@@ -9,7 +9,15 @@ var server = app.listen(8000, function() {
 });
 
 var io = require('socket.io')(server);
+var players = [];
 
 io.on('connection', function(client) {
-	console.log('User connected');
+	console.log('User connected', players);
+  client.emit('players', players);
+
+  client.on('newPlayer', function(player) {
+    console.log("newPlayer");
+    players.push(player);
+    client.broadcast.emit('joined', player);
+  });
 });
