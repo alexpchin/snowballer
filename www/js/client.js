@@ -48,6 +48,7 @@ $(window).on('beforeunload', function(){
 	socket.emit('leaveGame', tankName);
 });
 
+// Sending tank to app.js
 function joinGame(tankName, tankType, socket){
 	if(tankName != ''){
 		$('#prompt').hide();
