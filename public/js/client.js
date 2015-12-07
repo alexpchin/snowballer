@@ -1,5 +1,6 @@
 $(function(){
   $("form#chooseCharacter").on("submit", choosePlayer);
+  if ($('input[name=character]').is(':checked')) { $(".enter-name").show(); }
 });
 
 function choosePlayer(){
