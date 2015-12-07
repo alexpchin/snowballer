@@ -1,0 +1,25 @@
+{
+  "name": "Snowballer",
+  "description": "A multiplayer snowballing game.",
+  "main": "app.js",
+  "authors": [
+    "Alex Chin"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "snow",
+    "christmas"
+  ],
+  "homepage": "http://snowballer.herokuapp.com",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4"
+  }
+}
