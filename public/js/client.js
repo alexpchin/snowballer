@@ -1,6 +1,13 @@
 $(function(){
   $("form#chooseCharacter").on("submit", choosePlayer);
+  $('input[name=character]').on("change", showNameInput);
 });
+
+function showNameInput(){
+  if ($("input[type=radio][name=character]:checked")) {
+    return $(".enter-name").show();
+  }
+}
 
 function choosePlayer(){
   event.preventDefault();
@@ -21,7 +28,6 @@ socket.on('connect', function(){
 });
 
 socket.on('players', function(players) {
-  console.log("playaz", players);
   Object.keys(players).forEach(function(id){
     var name = players[id].name;
     var x    = players[id].x;
@@ -58,7 +64,6 @@ socket.on('playerStop', function(player){
 })
 
 socket.on('ballThrown', function(ball){
-  console.log("Thrown");
   new Ball(ball.x, ball.y, ball.direction);
 })
 

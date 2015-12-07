@@ -58,56 +58,6 @@ Player.prototype.getDirection = function(){
   return this.classList.match(/front-|right-|left-|back-/)[0].replace("-", "");
 }
 
-function Ball(x, y, direction) {
-  this.x         = parseInt(x)+10 + "px";
-  this.y         = parseInt(y)+10 + "px";
-  this.direction = direction;
-  this.$ball     = $("<div class='snowball'></div>");
-  this.$stage    = $("#stage");
-  var animation;
-
-  switch (this.direction) {
-    case "front":
-      animation = { top: "+=100" };
-      break;
-    case "back":
-      animation = { top: "-=100" };
-      break;
-    case "left":
-      animation = { left: "-=100" };
-      break;
-    case "right":
-      animation = { left: "+=100" };
-      break;
-  }
-
-  this.$ball.css("left", x).css("top", y);
-  this.$stage.append(this.$ball);
-  var ball = this;
-
-  this.$ball.show().animate(animation, 600, "linear", function() {
-    var ballx = $(this).css("left");
-    var bally = $(this).css("top");
-
-    console.log("ball ", this);
-    $(this).css("height", "20px").css("width", "20px").css("background-image", "url('/images/explosion.png')");
-
-    // Object.keys(_players).forEach(function(id) {
-    //   var x = _players[id].x;
-    //   var y = _players[id].y;
-
-    //   if (parseInt(ballx) <= parseInt(x)+15 &&
-    //       parseInt(ballx) >= parseInt(x)-15 &&
-    //       parseInt(bally) <= parseInt(y)+15 &&
-    //       parseInt(bally) >= parseInt(y)-15) {
-    //     return this.$ball.css("background-image", "url('/images/explosion.png')");
-    //   }
-    // });
-
-    
-  });
-}
-
 Player.prototype.throwBall = function(){
   var x = parseInt(this.x)+10 + "px";
   var y = parseInt(this.y)+10 + "px";
@@ -225,7 +175,6 @@ Player.prototype.step = function(direction, side, speed){
     
     var classList = self.character.attr("class");
     self.classList = classList;
-    console.log(classList);
 
     self.y = self.character.css("top");
     self.x = self.character.css("left");

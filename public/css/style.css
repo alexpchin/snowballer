@@ -13,6 +13,10 @@ h2 {
   margin-bottom: 15px;
 }
 
+p {
+  font-size: 14px;
+}
+
 .strong {
   font-weight: bold;
 }
@@ -20,15 +24,41 @@ h2 {
 /*form*/
 
 #form {
-  width: 500px;
+  max-width: 320px;
   margin: 30px auto;
   text-align: center;
   clear: both;
 }
 
-.character-form {
+input[type=text], input[type=submit] {
+  font-family: 'Cutive Mono';
+  border: 1px solid black;
+  padding: 5px 7px;
+  font-size: 14px;
+}
+
+input[type=text]:focus, input[type=submit]:focus {
+  outline: 0;
+}
+
+input[type=submit] {
+  background-color: black;
+  color: white;
+}
+
+input[type=submit]:hover {
+  background-color: white;
+  color: black;
+}
+
+.character-select {
   width: 65px;
   display: inline-block;
+}
+
+.enter-name {
+  margin-top: 20px;
+  display: none;
 }
 
 label > input {
@@ -38,20 +68,22 @@ label > input {
 
 label > input + img {
   cursor: pointer;
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   padding: 5px;
 }
 
 label > input:checked + img {
-  border: 2px solid black;
+  border: 1px solid black;
 }
+
+/*stage*/
 
 #stage {
   position: relative;
-  width: 320px;
+  max-width: 320px;
   height: 480px;
   margin: auto auto;
-  border: solid 2px #000;
+  border: solid 1px #000;
   overflow: hidden;
 }
 

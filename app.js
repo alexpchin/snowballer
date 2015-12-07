@@ -39,8 +39,6 @@ io.on('connection', function(client) {
   }
 
   function ballThrown(ball){
-    console.log("Ball thrown.")
-    console.log(ball)
     return client.broadcast.emit("ballThrown", ball);
   }
 
@@ -49,4 +47,3 @@ io.on('connection', function(client) {
     return client.broadcast.emit("left", playerId);
   }
 });
-
