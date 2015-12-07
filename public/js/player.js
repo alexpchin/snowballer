@@ -62,7 +62,6 @@ Player.prototype.throwBall = function(){
   var x = parseInt(this.x)+10 + "px";
   var y = parseInt(this.y)+10 + "px";
   var direction = this.getDirection(this.classList);
-
   var ball = new Ball(x, y, direction);
   return window.socket.emit('ballThrown', ball);
 }
