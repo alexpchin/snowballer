@@ -17,8 +17,8 @@ io.on('connection', function(client) {
   client.on('playerMove', playerMove);
   client.on('playerStop', playerStop);
   client.on('ballThrown', ballThrown);
-  client.on('updatePosition', updatePosition)
-  client.on('leaveGame', leaveGame)
+  client.on('updatePosition', updatePosition);
+  client.on('leaveGame', leaveGame);
 
   function newPlayer(player) {
     players[player.id] = player;

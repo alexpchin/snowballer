@@ -1,7 +1,21 @@
+var socket = io.connect('http://b27f3cac.ngrok.io/');
+var _players = {};
+var localPlayer = {};
+
 $(function(){
   $("form#chooseCharacter").on("submit", choosePlayer);
   $('input[name=character]').on("change", showNameInput);
 });
+
+$(window).on('beforeunload', leaveGame);
+
+socket.on('connect', connect);
+socket.on('players', players);
+socket.on('joined', joined);
+socket.on('left', left);
+socket.on('playerMove', playerMove);
+socket.on('playerStop', playerStop);
+socket.on('ballThrown', ballThrown);
 
 function showNameInput(){
   if ($("input[type=radio][name=character]:checked")) {
@@ -18,55 +32,48 @@ function choosePlayer(){
   $("#chooseCharacter").empty();
 }
 
-var socket = io.connect('http://b27f3cac.ngrok.io/');
+function connect(){
+  return localPlayer.socketId = socket.io.engine.id;
+}
 
-var _players = {};
-var localPlayer = {};
-
-socket.on('connect', function(){
-  localPlayer.socketId = socket.io.engine.id;
-});
-
-socket.on('players', function(players) {
+function players(players) {
   Object.keys(players).forEach(function(id){
     var name = players[id].name;
     var x    = players[id].x;
     var y    = players[id].y;
     var team = players[id].team;
     var classList = players[id].classList
-    _players[id] = new Player(name, team, id, false, x, y, classList);
+    return _players[id] = new Player(name, team, id, false, x, y, classList);
   });
-});
+}
 
-socket.on('joined', function(player) {
+function joined(player) {
   var name = player.name;
   var id   = player.id;
   var x    = player.x;
   var y    = player.y;
   var team = player.team;
   var classList = player.classList
-  _players[player.id] = new Player(name, team, id, false, x, y, classList);
-});
+  return _players[player.id] = new Player(name, team, id, false, x, y, classList);
+}
 
-socket.on('left', function(playerId) {
-  $("#"+playerId).fadeOut(function(){
-    $(this).remove();
-  });
-  delete _players[playerId];
-})
+function left(playerId) {
+  $("#"+playerId).fadeOut(function(){ $(this).remove(); });
+  return delete _players[playerId];
+}
 
-socket.on('playerMove', function(data){
-  _players[data.id].move(data.direction, data.keyCode);
-})
+function playerMove(data){
+  return _players[data.id].move(data.direction, data.keyCode);
+}
 
-socket.on('playerStop', function(player){
-  _players[player.id].stop();
-})
+function playerStop(player){
+  return _players[player.id].stop();
+}
 
-socket.on('ballThrown', function(ball){
-  new Ball(ball.x, ball.y, ball.direction);
-})
+function ballThrown(ball){
+  return new Ball(ball.x, ball.y, ball.direction);
+}
 
-$(window).on('beforeunload', function(){
-  socket.emit('leaveGame', localPlayer.id);
-});
+function leaveGame(){
+  return socket.emit('leaveGame', localPlayer.id);
+}

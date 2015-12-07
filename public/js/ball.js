@@ -1,6 +1,6 @@
 function Ball(x, y, direction) {
-  this.x         = parseInt(x)+10 + "px";
-  this.y         = parseInt(y)+10 + "px";
+  this.x         = parseInt(x) + "px";
+  this.y         = parseInt(y) + "px";
   this.direction = direction;
   this.$ball     = $("<div class='snowball'></div>");
   this.$stage    = $("#stage");
