@@ -1,5 +1,4 @@
-function Player(name, id, isLocal, socket){
-  this.socket = socket;
+function Player(name, id, isLocal){
   this.name = name;
   this.id = id;
   this.character = $('<div id="' + this.id + '" class="character"></div>');
@@ -13,7 +12,6 @@ function Player(name, id, isLocal, socket){
 }
 
 Player.prototype.init = function(){
-  console.log("init");
   this.stage.append(this.character);
   this.character.addClass('front-stand');
 }
@@ -25,13 +23,28 @@ Player.prototype.bindEvents = function(){
   
 Player.prototype.keydown = function(e){
   if (!this.currentKey && this.character.queue("fx").length == 0) {
-    this.currentKey = e.keyCode;
+
+    var direction;
     switch(e.keyCode) {
-      case 38: this.move('up');    break;
-      case 39: this.move('right'); break;
-      case 40: this.move('down');  break;
-      case 37: this.move('left');  break;
-      default: return;             break;
+      case 38: 
+        direction = 'up';    
+        break;
+      case 39: 
+        direction = 'right';   
+        break;
+      case 40: 
+        direction = 'down';
+        break;
+      case 37: 
+        direction = 'left';
+        break;
+      default: 
+        return;
+    }
+
+    if (direction) {
+      this.move(direction, e.keyCode);
+      window.socket.emit('playerMove', { id: this.id, direction: direction, keyCode: e.keyCode });
     }
   }
 }
@@ -39,15 +52,23 @@ Player.prototype.keydown = function(e){
 // Prevent movement if player is:
 // - pushing other buttons
 // - only stop the walk if the key that started the walk is released
-Player.prototype.keyup = function(e){
-  if (e.keyCode == this.currentKey) return this.currentKey = false;
+Player.prototype.keyup = function(){
+  // if (e.keyCode == this.currentKey) {
+    window.socket.emit('playerStop', this.id);
+    this.stop();
+  // }
+}
+
+Player.prototype.stop = function(){
+  console.log(this);
+  console.log(this.currentKey);
+  return this.currentKey = false;
 }
   
-Player.prototype.move = function(direction) {
-  window.socket.emit('playerMove', { id: this.id, direction: direction });
-
+Player.prototype.move = function(direction, keyCode) {
   // a player could switch key mid-animation
   // records the key that was down when animation started
+  this.currentKey = keyCode;
   var currentKeyCheck = this.currentKey;
     
   // adjust from lang to code
@@ -84,34 +105,39 @@ Player.prototype.move = function(direction) {
       break;
   }
   
+  var player = this;
   // move the character
   switch(direction) {
     case 'front':
-      this.character.animate({
+      player.character.animate({
         top: '+=32'
-      }, this.charSpeed, "linear", function() {
-        if (this.currentKey == currentKeyCheck) this.move(direction);
+      }, player.charSpeed, "linear", function() {
+        if (player.currentKey == currentKeyCheck) player.move(direction);
       });
       break;
     case 'back':
-      if (this.character.position().top > 0) {
-        this.character.animate({
+      if (player.character.position().top > 0) {
+        player.character.animate({
           top: '-=32'
-        }, this.charSpeed, "linear", function() {
-          if (this.currentKey == currentKeyCheck) this.move(direction);
+        }, player.charSpeed, "linear", function() {
+          if (player.currentKey == currentKeyCheck) player.move(direction);
         });
       }
       break;
     case 'left':
-      if (this.character.position().left > 0) {
-        this.character.animate({left: '-=32'}, this.charSpeed, "linear", function() {
-          if (this.currentKey == currentKeyCheck) this.move(direction);
+      if (player.character.position().left > 0) {
+        player.character.animate({
+          left: '-=32'
+        }, player.charSpeed, "linear", function() {
+          if (player.currentKey == currentKeyCheck) player.move(direction);
         });
       }
       break;
     case 'right':
-      this.character.animate({left: '+=32'}, this.charSpeed, "linear", function() {
-        if (this.currentKey == currentKeyCheck) this.move(direction);
+      player.character.animate({
+        left: '+=32'
+      }, player.charSpeed, "linear", function() {
+        if (player.currentKey == currentKeyCheck) player.move(direction);
       });
       break;
   }
