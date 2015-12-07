@@ -4,7 +4,6 @@ var localPlayer = {};
 
 $(function(){
   $("form#chooseCharacter").on("submit", choosePlayer);
-  $('input[name=character]').on("change", showNameInput);
 });
 
 $(window).on('beforeunload', leaveGame);
@@ -16,12 +15,6 @@ socket.on('left', left);
 socket.on('playerMove', playerMove);
 socket.on('playerStop', playerStop);
 socket.on('ballThrown', ballThrown);
-
-function showNameInput(){
-  if ($("input[type=radio][name=character]:checked")) {
-    return $(".enter-name").show();
-  }
-}
 
 function choosePlayer(){
   event.preventDefault();
