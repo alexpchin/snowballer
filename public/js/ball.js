@@ -23,11 +23,11 @@ function Ball(x, y, direction) {
 
   this.$ball.css("left", x).css("top", y);
   this.$stage.append(this.$ball);
-  var ball = this;
 
   this.$ball.show().animate(animation, 600, "linear", function() {
     var ballx = $(this).css("left");
     var bally = $(this).css("top");
+    var ball = this;
 
     Object.keys(_players).forEach(function(id) {
       var x = _players[id].x;
@@ -37,12 +37,24 @@ function Ball(x, y, direction) {
           parseInt(ballx) >= parseInt(x)-15 &&
           parseInt(bally) <= parseInt(y)+15 &&
           parseInt(bally) >= parseInt(y)-15) {
-        return $(this)
-          .css("background-image", "url('/images/splat.png')", "width", "14px", "height", "14px");
-          console.log("HIT");
+        $(ball)
+          .css("background-image", "url('/images/splat.png')") 
+          .css("width", "14px")
+          .css("height", "14px");
+
+        _players[id].hp -= 10;
+        if (_players[id].hp === 0) {
+          _players[id].character.fadeOut("200", function(){
+            $(ball).remove();
+          });
+        }
       }
     });
 
-    return $(this).fadeOut("200");
+    setTimeout(function(){
+      $(ball).fadeOut("200", function(){
+        $(ball).remove();
+      });
+    }, 1000);
   });
 }

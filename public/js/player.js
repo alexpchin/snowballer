@@ -11,7 +11,7 @@ function Player(name, team, id, isLocal, x, y, classList){
   this.y         = y || Math.random()*this.stage.height()/2;
   this.charStep  = 2; 
   this.charSpeed = 400;
-  this.hp        =
+  this.hp        = 100;
   this.init();
   if (isLocal) this.bindEvents();
 }
