@@ -1,19 +1,26 @@
-function Player(name, id, isLocal){
+function Player(name, id, isLocal, x, y, classList){
   this.name = name;
   this.id = id;
-  this.character = $('<div id="' + this.id + '" class="character"></div>');
+  this.character = $('<div id="' + this.id + '" class="character front-stand"></div>');
+  this.classList = classList || "character front-stand";
   this.currentKey;
   this.charStep;
+  this.x = x || 0; // Will be random
+  this.y = y || 0; // Will be random
   this.charStep = 2; 
   this.charSpeed = 400;
   this.stage = $('#stage');
   this.init();
-  if(isLocal) this.bindEvents();
+  if (isLocal) this.bindEvents();
 }
 
 Player.prototype.init = function(){
   this.stage.append(this.character);
-  this.character.addClass('front-stand');
+  this.character
+    .addClass(this.classList)
+    .css("left", this.x)
+    .css("top", this.y)
+    .fadeIn();
 }
 
 Player.prototype.bindEvents = function(){
@@ -38,6 +45,9 @@ Player.prototype.keydown = function(e){
       case 37: 
         direction = 'left';
         break;
+      case 32:
+        this.throwBall();
+        break;
       default: 
         return;
     }
@@ -49,19 +59,21 @@ Player.prototype.keydown = function(e){
   }
 }
 
+Player.prototype.throwBall = function(){
+  console.log(this.x, this.y);
+  this.stage.append("<img src=''>")
+  console.log("Throw!")
+}
+
 // Prevent movement if player is:
 // - pushing other buttons
 // - only stop the walk if the key that started the walk is released
 Player.prototype.keyup = function(){
-  // if (e.keyCode == this.currentKey) {
-    window.socket.emit('playerStop', this.id);
-    this.stop();
-  // }
+  window.socket.emit('playerStop', this);
+  this.stop();
 }
 
 Player.prototype.stop = function(){
-  console.log(this);
-  console.log(this.currentKey);
   return this.currentKey = false;
 }
   
@@ -72,8 +84,8 @@ Player.prototype.move = function(direction, keyCode) {
   var currentKeyCheck = this.currentKey;
     
   // adjust from lang to code
-  if (direction == 'up') direction = 'back';
-  if (direction == 'down') direction = 'front';
+  if (keyCode == 38) direction = "back";
+  if (keyCode == 40) direction = "front";
     
   this.charStep++;
   if (this.charStep == 5) this.charStep = 1;
@@ -105,14 +117,15 @@ Player.prototype.move = function(direction, keyCode) {
       break;
   }
   
+  // Actually move the character
   var player = this;
-  // move the character
   switch(direction) {
     case 'front':
       player.character.animate({
         top: '+=32'
       }, player.charSpeed, "linear", function() {
         if (player.currentKey == currentKeyCheck) player.move(direction);
+        player.y = player.character.css("top");
       });
       break;
     case 'back':
@@ -121,6 +134,7 @@ Player.prototype.move = function(direction, keyCode) {
           top: '-=32'
         }, player.charSpeed, "linear", function() {
           if (player.currentKey == currentKeyCheck) player.move(direction);
+          player.y = player.character.css("top");
         });
       }
       break;
@@ -130,6 +144,7 @@ Player.prototype.move = function(direction, keyCode) {
           left: '-=32'
         }, player.charSpeed, "linear", function() {
           if (player.currentKey == currentKeyCheck) player.move(direction);
+          player.x = player.character.css("left");
         });
       }
       break;
@@ -138,18 +153,28 @@ Player.prototype.move = function(direction, keyCode) {
         left: '+=32'
       }, player.charSpeed, "linear", function() {
         if (player.currentKey == currentKeyCheck) player.move(direction);
+        player.x = player.character.css("left");
       });
       break;
   }
+
+  return window.socket.emit('updatePosition', player);
 }
 
 Player.prototype.step = function(direction, side, speed){
   var self = this;
+
   setTimeout(function() { 
     self.charStep++;
     if (self.charStep == 5) self.charStep = 1;
 
     self.character.attr('class', 'character');
     self.character.addClass(direction + side);
+    
+    var classList = self.character.attr("class");
+    self.classList = classList;
+    self.y = self.character.css("top");
+    self.x = self.character.css("left");
+    window.socket.emit('updatePosition', self);
   }, speed);
 }

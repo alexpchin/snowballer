@@ -1,4 +1,4 @@
-var socket = io.connect('http://10.51.20.213:8000');
+var socket = io.connect('http://b27f3cac.ngrok.io/');
 
 var _players = {};
 var localPlayer = {};
@@ -11,17 +11,29 @@ socket.on('connect', function(){
 
 socket.on('players', function(players) {
   console.log("playaz", players);
+  // debugger
   Object.keys(players).forEach(function(id){
-    _players[id] = new Player(players[id].name, id, false);
+    var name = players[id].name;
+    var x    = players[id].x;
+    var y    = players[id].y;
+    var classList = players[id].classList
+    _players[id] = new Player(name, id, false, x, y, classList);
   });
 });
 
 socket.on('joined', function(player) {
-  _players[player.id] = new Player(player.name, player.id, false);
+  var name = player.name;
+  var id   = player.id;
+  var x    = player.x;
+  var y    = player.y;
+  var classList = player.classList
+  _players[player.id] = new Player(name, id, false, x, y, classList);
 });
 
 socket.on('left', function(playerId) {
-  $("#"+playerId).remove();
+  $("#"+playerId).fadeOut(function(){
+    $(this).remove();
+  });
   delete _players[playerId];
 })
 
@@ -29,8 +41,8 @@ socket.on('playerMove', function(data){
   _players[data.id].move(data.direction, data.keyCode);
 })
 
-socket.on('playerStop', function(playerId){
-  _players[playerId].stop();
+socket.on('playerStop', function(player){
+  _players[player.id].stop();
 })
 
 $(window).on('beforeunload', function(){
