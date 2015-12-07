@@ -4,7 +4,6 @@ var localPlayer = {};
 
 $(function(){
   $("form#chooseCharacter").on("submit", choosePlayer);
-  $('input[name=character]').on("change", showNameInput);
 });
 
 $(window).on('beforeunload', leaveGame);
