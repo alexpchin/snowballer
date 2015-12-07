@@ -2,8 +2,9 @@ body {
   font-family: 'Cutive Mono';
 }
 
+/*typography*/
+
 h1 {
-  font-weight: bold;
   margin-bottom: 20px;
   font-size: 30px;
 }
@@ -11,6 +12,12 @@ h1 {
 h2 {
   margin-bottom: 15px;
 }
+
+.strong {
+  font-weight: bold;
+}
+
+/*form*/
 
 #form {
   width: 500px;
@@ -38,6 +45,8 @@ label > input + img {
 label > input:checked + img {
   border: 2px solid black;
 }
+
+/*sprites*/
 
 .character {
   position: absolute;
@@ -91,12 +100,13 @@ label > input:checked + img {
 .character.back-stand { background-position: -11px -105px; }
 .character.back-left { background-position: -57px -105px; }*/
 
-/*Stage*/
+/*stage*/
+
 #stage {
-    position: relative;
-    width: 640px;
-    height: 480px;
-    margin: auto auto;
-    border: solid 2px #000;
-    overflow: hidden;
-  }
+  position: relative;
+  width: 640px;
+  height: 480px;
+  margin: auto auto;
+  border: solid 2px #000;
+  overflow: hidden;
+}
