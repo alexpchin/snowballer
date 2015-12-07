@@ -1,4 +1,4 @@
-var socket = io.connect('http://localhost:8000');
+var socket = io.connect('http://10.51.20.213:8000');
 
 var _players = {};
 var localPlayer = {};
