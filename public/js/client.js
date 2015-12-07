@@ -1,13 +1,6 @@
 $(function(){
   $("form#chooseCharacter").on("submit", choosePlayer);
-  $('input[name=character]').on("change", showNameInput);
 });
-
-function showNameInput(){
-  if ($("input[type=radio][name=character]:checked")) {
-    return $(".enter-name").show();
-  }
-}
 
 function choosePlayer(){
   event.preventDefault();
