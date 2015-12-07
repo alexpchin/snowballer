@@ -258,41 +258,43 @@ Tank.prototype = {
 
 		/* Detect both keypress and keyup to allow multiple keys
 		 and combined directions */
-		$(document).keypress( function(e){
+		$(document).on("keydown", function(e){
 			var k = e.keyCode || e.which;
+
 			switch(k){
-				case 119: //W
+				case 38: // up
 					t.dir[1] = -1;
 					break;
-				case 100: //D
+				case 39: // down
 					t.dir[0] = 1;
 					break;
-				case 115: //S
+				case 40: // right
 					t.dir[1] = 1;
 					break;
-				case 97: //A
+				case 37: // left
 					t.dir[0] = -1;
 					break;
 			}
 			
-		}).keyup( function(e){
+		}).on("keyup", function(e){
 			var k = e.keyCode || e.which;
 			switch(k){
-				case 87: //W
+				case 38: // up
 					t.dir[1] = 0;
 					break;
-				case 68: //D
+				case 39: // down
 					t.dir[0] = 0;
 					break;
-				case 83: //S
+				case 40: // right
 					t.dir[1] = 0;
 					break;
-				case 65: //A
+				case 37: // left
 					t.dir[0] = 0;
 					break;
+				case 32: // space
+					t.shoot();
+					break
 			}
-		}).keydown( function(event){
-			if(event.keyCode === '32') t.shoot();
 		});
 
 	},
