@@ -3,7 +3,7 @@ function Player(name, team, id, isLocal, x, y, classList){
   this.id        = id;
   this.team      = team;
   this.character = $('<div id="' + this.id + '" alt="'+ this.name+ '" class="'+ this.team +' character front-stand"></div>');
-  this.classList = classList || "character front-stand";
+  this.classList = classList || "hp100 character front-stand";
   this.currentKey;
   this.charStep;
   this.stage     = $('#stage');
@@ -85,7 +85,7 @@ Player.prototype.move = function(direction, keyCode) {
     
   this.charStep++;
   if (this.charStep == 5) this.charStep = 1; // There are 4 states for the sprite
-  this.character.attr('class',  this.team + ' character'); // reset the current class
+  this.character.attr('class',  'hp' + this.hp + ' ' + this.team + ' character'); // reset the current class
   this.makeSteps(direction);
   this.makeMoves(direction);
 }
@@ -130,7 +130,7 @@ Player.prototype.step = function(direction, side, speed){
     self.charStep++;
     if (self.charStep == 5) self.charStep = 1;
 
-    self.character.attr('class', self.team + ' character');
+    self.character.attr('class', 'hp' + self.hp + ' ' + self.team + ' character');
     self.character.addClass(direction + side);
     
     var classList = self.character.attr("class");
@@ -170,9 +170,10 @@ Player.prototype.makeMoves = function(direction){
 
 Player.prototype.hit = function(){
   $("#"+this.team).text(parseInt($("#"+this.team).text())+1);
-  
+  $(this).removeClass('hp' + this.hp);
   console.log("REDUCING HP");
   this.hp -= 10;
+  $(this).addClass('hp' + this.hp);
   if (this.hp === 0) { return this.character.fadeOut("200");
     return false;
   }

@@ -122,13 +122,80 @@ label > input:checked + img {
   display: none;
 }
 
-.character::before {
+/*.character::before {
   content: "";
   position: absolute;
   top: -7px;
   width: 35px;
   border-radius: 3px;
   height: 5px;
+  background: green;
+}*/
+
+.hp100::before,
+.hp90::before,
+.hp80::before,
+.hp70::before,
+.hp60::before,
+.hp50::before,
+.hp40::before,
+.hp30::before {
+  content: "";
+  position: absolute;
+  top: -7px;
+  width: 35px;
+  border-radius: 3px;
+  height: 5px;
+  background: green;
+}
+
+.hp100 {
+  width: 35px;
+  background: green;
+}
+
+.hp90 {
+  width: 31.5px;
+  background: green;
+}
+
+.hp80 {
+  width: 28px;
+  background: green;
+}
+
+.hp70 {
+  width: 24.5px;
+  background: green;
+}
+
+.hp60 {
+  width: 21px;
+  background: green;
+}
+
+.hp50 {
+  width: 17.5px;
+  background: green;
+}
+
+.hp40 {
+  width: 14px;
+  background: green;
+}
+
+.hp30 {
+  width: 10.5px;
+  background: green;
+}
+
+.hp20 {
+  width: 7px;
+  background: green;
+}
+
+.hp10 {
+  width: 3.5px;
   background: green;
 }
 
@@ -200,4 +267,4 @@ label > input:checked + img {
 
 .gerry.back-right { background-position: -156px -105px; }
 .gerry.back-stand { background-position: -11px -105px; }
-.gerry.back-left { background-position: -57px -105px; }
+.gerry.back-left { background-position: -57px -105px;hp }
