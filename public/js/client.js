@@ -67,7 +67,6 @@ function players(game) {
   });
 
   // Update scores
-  console.log(game)
   $("#gerry").text(game.scores["gerry"]);
   $("#alex").text(game.scores["alex"]);
 }
