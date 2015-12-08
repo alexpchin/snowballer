@@ -1,4 +1,4 @@
-var socket      = io.connect('http://b27f3cac.ngrok.io/');
+var socket      = io.connect(window.location.origin);
 var _players    = {};
 var _balls      = {};
 var localPlayer = {};
