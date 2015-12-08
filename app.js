@@ -27,7 +27,8 @@ io.on('connection', function(client) {
   client.on('leaveGame', leaveGame);
   client.on('hit', hit);
 
-  function hit(playerId){
+  function hit(playerId, ballId){
+    console.log(playerId, ballId)
     return client.broadcast.emit('hit', playerId, ballId);
   }
 

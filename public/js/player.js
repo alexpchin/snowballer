@@ -170,10 +170,9 @@ Player.prototype.makeMoves = function(direction){
 
 Player.prototype.hit = function(){
   $("#"+this.team).text(parseInt($("#"+this.team).text())+1);
-  $(this).removeClass('hp' + this.hp);
-  console.log("REDUCING HP");
+  this.character.removeClass('hp' + this.hp);
   this.hp -= 10;
-  $(this).addClass('hp' + this.hp);
+  this.character.addClass('hp' + this.hp);
   if (this.hp === 0) { return this.character.fadeOut("200");
     return false;
   }

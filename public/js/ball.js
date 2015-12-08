@@ -19,16 +19,16 @@ Ball.prototype.animateBall = function(){
     var bx = self.$ball.css("left");
     var by = self.$ball.css("top");
 
-    Object.keys(_players).forEach(function(id) {
-      var px = _players[id].x;
-      var py = _players[id].y;
+    Object.keys(_players).forEach(function(playerId) {
+      var px = _players[playerId].x;
+      var py = _players[playerId].y;
 
       if (parseInt(bx) <= parseInt(px)+20 &&
           parseInt(bx) >= parseInt(px)-20 &&
           parseInt(by) <= parseInt(py)+20 &&
           parseInt(by) >= parseInt(py)-20) {
-        self.splat(id);        
-        window.socket.emit('hit', id, self.id);
+        self.splat(playerId);        
+        window.socket.emit('hit', playerId, self.id);
       }
     });
 
