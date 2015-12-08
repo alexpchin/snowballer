@@ -139,64 +139,69 @@ label > input:checked + img {
 .hp60::before,
 .hp50::before,
 .hp40::before,
-.hp30::before {
+.hp30::before,
+.hp20::before,
+.hp10::before {
   content: "";
   position: absolute;
   top: -7px;
-  width: 35px;
   border-radius: 3px;
   height: 5px;
-  background: green;
 }
 
-.hp100 {
+.hp100::before {
   width: 35px;
   background: green;
 }
 
-.hp90 {
+.hp90::before {
   width: 31.5px;
   background: green;
 }
 
-.hp80 {
+.hp80::before {
   width: 28px;
   background: green;
 }
 
-.hp70 {
+.hp70::before {
   width: 24.5px;
   background: green;
 }
 
-.hp60 {
+.hp60::before {
   width: 21px;
-  background: green;
+  background: orange;
 }
 
-.hp50 {
+.hp50::before {
   width: 17.5px;
-  background: green;
+  background: orange;
 }
 
-.hp40 {
+.hp40::before {
   width: 14px;
-  background: green;
+  background: orange;
 }
 
-.hp30 {
+.hp30::before {
   width: 10.5px;
-  background: green;
+  background: red;
 }
 
-.hp20 {
+.hp20::before {
   width: 7px;
-  background: green;
+  background: red;
 }
 
-.hp10 {
+.hp10::before {
   width: 3.5px;
-  background: green;
+  background: red;
+}
+
+.hp0::before {
+  width: 0;
+  background: red;
 }
 
 .character::after {
