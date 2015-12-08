@@ -1,5 +1,6 @@
-var socket = io.connect('http://b27f3cac.ngrok.io/');
-var _players = {};
+var socket      = io.connect('http://b27f3cac.ngrok.io/');
+var _players    = {};
+var _balls      = {};
 var localPlayer = {};
 
 $(function(){
@@ -15,6 +16,16 @@ socket.on('left', left);
 socket.on('playerMove', playerMove);
 socket.on('playerStop', playerStop);
 socket.on('ballThrown', ballThrown);
+socket.on('hit', hit);
+
+function hit(ballId){
+  var ball = _balls[ballId];
+  ball.$ball
+    .css("background-image", "url('/images/splat.png')") 
+    .css("width", "14px")
+    .css("height", "14px");
+  console.log(ball);
+}
 
 function choosePlayer(){
   event.preventDefault();
@@ -64,7 +75,7 @@ function playerStop(player){
 }
 
 function ballThrown(ball){
-  return new Ball(ball.x, ball.y, ball.direction);
+  return _balls[ball.id] = new Ball(ball.id, ball.x, ball.y, ball.direction, ball.player);
 }
 
 function leaveGame(){

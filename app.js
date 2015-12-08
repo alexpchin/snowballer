@@ -19,10 +19,16 @@ io.on('connection', function(client) {
   client.on('ballThrown', ballThrown);
   client.on('updatePosition', updatePosition);
   client.on('leaveGame', leaveGame);
+  client.on('hit', hit);
+
+  function hit(ballId){
+    console.log("hit")
+    return client.broadcast.emit('hit', ballId);
+  }
 
   function newPlayer(player) {
     players[player.id] = player;
-    client.broadcast.emit('joined', player);
+    return client.broadcast.emit('joined', player);
   }
 
   function playerMove(player) {

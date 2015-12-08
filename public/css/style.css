@@ -104,6 +104,16 @@ label > input:checked + img {
   display: none;
 }
 
+.character::before {
+  content: "";
+  position: absolute;
+  top: -7px;
+  width: 35px;
+  border-radius: 3px;
+  height: 5px;
+  background: green;
+}
+
 .character::after {
   content: attr(alt);
   position: absolute;

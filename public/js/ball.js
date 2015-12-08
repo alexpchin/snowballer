@@ -1,60 +1,72 @@
-function Ball(x, y, direction) {
+function Ball(id, x, y, direction, player) {
+  this.id        = id;
+  this.player    = player;
   this.x         = parseInt(x) + "px";
   this.y         = parseInt(y) + "px";
   this.direction = direction;
-  this.$ball     = $("<div class='snowball'></div>");
+  this.$ball     = $("<div id='"+this.id+"' class='snowball'></div>");
   this.$stage    = $("#stage");
-  
-  var animation;
-  switch (this.direction) {
-    case "front":
-      animation = { top: "+=100" };
-      break;
-    case "back":
-      animation = { top: "-=100" };
-      break;
-    case "left":
-      animation = { left: "-=100" };
-      break;
-    case "right":
-      animation = { left: "+=100" };
-      break;
-  }
 
   this.$ball.css("left", x).css("top", y);
   this.$stage.append(this.$ball);
+  this.animateBall();
+}
 
+Ball.prototype.animateBall = function(){
+  var animation  = this.getDirection();
+  var self = this;
   this.$ball.show().animate(animation, 600, "linear", function() {
-    var ballx = $(this).css("left");
-    var bally = $(this).css("top");
-    var ball = this;
+    var bx = self.$ball.css("left");
+    var by = self.$ball.css("top");
 
     Object.keys(_players).forEach(function(id) {
-      var x = _players[id].x;
-      var y = _players[id].y;
+      var px = _players[id].x;
+      var py = _players[id].y;
 
-      if (parseInt(ballx) <= parseInt(x)+15 &&
-          parseInt(ballx) >= parseInt(x)-15 &&
-          parseInt(bally) <= parseInt(y)+15 &&
-          parseInt(bally) >= parseInt(y)-15) {
-        $(ball)
-          .css("background-image", "url('/images/splat.png')") 
-          .css("width", "14px")
-          .css("height", "14px");
-
-        _players[id].hp -= 10;
-        if (_players[id].hp === 0) {
-          _players[id].character.fadeOut("200", function(){
-            $(ball).remove();
-          });
-        }
+      if (parseInt(bx) <= parseInt(px)+15 &&
+          parseInt(bx) >= parseInt(px)-15 &&
+          parseInt(by) <= parseInt(py)+15 &&
+          parseInt(by) >= parseInt(py)-15) {
+        self.splat();        
+        window.socket.emit('hit', self.id);
       }
     });
 
-    setTimeout(function(){
-      $(ball).fadeOut("200", function(){
-        $(ball).remove();
-      });
-    }, 1000);
+    return self.disappear();
   });
+}
+
+Ball.prototype.splat = function() {
+  this.$ball
+    .css("background-image", "url('/images/splat.png')") 
+    .css("width", "14px")
+    .css("height", "14px");
+  delete _balls[this.id];
+  return this.player.hit();
+}
+
+Ball.prototype.getDirection = function(){
+  switch (this.direction) {
+    case "front":
+      return { top: "+=100" };
+      break;
+    case "back":
+      return { top: "-=100" };
+      break;
+    case "left":
+      return { left: "-=100" };
+      break;
+    case "right":
+      return { left: "+=100" };
+      break;
+  }
+}
+
+Ball.prototype.disappear = function(){
+  var ball = this;
+  return setTimeout(function(){
+    ball.$ball.fadeOut("200", function(){
+      ball.$ball.remove();
+    });
+  }, 1000);
 }
