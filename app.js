@@ -27,8 +27,8 @@ io.on('connection', function(client) {
   client.on('leaveGame', leaveGame);
   client.on('hit', hit);
 
-  function hit(ballId){
-    return client.broadcast.emit('hit', ballId);
+  function hit(playerId){
+    return client.broadcast.emit('hit', playerId, ballId);
   }
 
   function newPlayer(player) {

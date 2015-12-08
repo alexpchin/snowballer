@@ -27,8 +27,8 @@ Ball.prototype.animateBall = function(){
           parseInt(bx) >= parseInt(px)-20 &&
           parseInt(by) <= parseInt(py)+20 &&
           parseInt(by) >= parseInt(py)-20) {
-        self.splat();        
-        window.socket.emit('hit', self.id);
+        self.splat(id);        
+        window.socket.emit('hit', id, self.id);
       }
     });
 
@@ -36,13 +36,13 @@ Ball.prototype.animateBall = function(){
   });
 }
 
-Ball.prototype.splat = function() {
+Ball.prototype.splat = function(playerId) {
   this.$ball
     .css("background-image", "url('/images/splat.png')") 
     .css("width", "14px")
     .css("height", "14px");
   delete _balls[this.id];
-  return this.player.hit();
+  return _players[playerId].hit();
 }
 
 Ball.prototype.getDirection = function(){
