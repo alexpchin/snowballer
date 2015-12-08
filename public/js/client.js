@@ -16,9 +16,10 @@ socket.on('left', left);
 socket.on('playerMove', playerMove);
 socket.on('playerStop', playerStop);
 socket.on('ballThrown', ballThrown);
-socket.on('hit', hit);
+socket.on('hitPlayer', hit);
 
 function hit(data){
+  console.log("HIT", data);
   var ball = $("#"+data.ballId);
   ball
     .css("background-image", "url('/images/splat.png')") 

@@ -169,16 +169,17 @@ Player.prototype.makeMoves = function(direction){
 }
 
 Player.prototype.hit = function(victim){
-  console.log(this, victim)
+  // console.log(this.id, _players[victim.id].character);
   if (this.team !== victim.team) {
     $("#"+this.team).text(parseInt($("#"+this.team).text())+1);
   }
-  this.character.removeClass('hp' + this.hp);
-  this.hp -= 10;
-  this.character.addClass('hp' + this.hp);
-  if (this.hp === 0) { 
-    return this.character.fadeOut("200", function(){
+  _players[victim.id].character.removeClass('hp' + victim.hp);
+  victim.hp -= 10;
+  _players[victim.id].character.addClass('hp' + victim.hp);
+  if (victim.hp === 0) { 
+    return _players[victim.id].character.fadeOut("200", function(){
       $(this).remove();
+      delete _players[victim.id];
     });
   }
 }

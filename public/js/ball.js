@@ -28,8 +28,8 @@ Ball.prototype.animateBall = function(){
           parseInt(bx) >= parseInt(px)-20 &&
           parseInt(by) <= parseInt(py)+20 &&
           parseInt(by) >= parseInt(py)-20) {
-        self.splat(victim);        
-        window.socket.emit('hit', {
+        self.splat(victim);      
+        window.socket.emit('hitPlayer', {
           thrower: self.player,
           ballId: self.id,
           victim: victim

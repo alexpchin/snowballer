@@ -28,6 +28,7 @@ io.on('connection', function(client) {
   client.on('hit', hit);
 
   function hit(data){
+    // console.log("HIT", data);
     return client.broadcast.emit('hit', data);
   }
 
