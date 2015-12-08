@@ -168,12 +168,17 @@ Player.prototype.makeMoves = function(direction){
   return window.socket.emit('updatePosition', player);
 }
 
-Player.prototype.hit = function(){
-  $("#"+this.team).text(parseInt($("#"+this.team).text())+1);
+Player.prototype.hit = function(victim){
+  console.log(this, victim)
+  if (this.team !== victim.team) {
+    $("#"+this.team).text(parseInt($("#"+this.team).text())+1);
+  }
   this.character.removeClass('hp' + this.hp);
   this.hp -= 10;
   this.character.addClass('hp' + this.hp);
-  if (this.hp === 0) { return this.character.fadeOut("200");
-    return false;
+  if (this.hp === 0) { 
+    return this.character.fadeOut("200", function(){
+      $(this).remove();
+    });
   }
 }

@@ -20,15 +20,20 @@ Ball.prototype.animateBall = function(){
     var by = self.$ball.css("top");
 
     Object.keys(_players).forEach(function(playerId) {
-      var px = _players[playerId].x;
-      var py = _players[playerId].y;
+      var victim = _players[playerId];
+      var px = victim.x;
+      var py = victim.y;
 
       if (parseInt(bx) <= parseInt(px)+20 &&
           parseInt(bx) >= parseInt(px)-20 &&
           parseInt(by) <= parseInt(py)+20 &&
           parseInt(by) >= parseInt(py)-20) {
-        self.splat(playerId);        
-        window.socket.emit('hit', playerId, self.id);
+        self.splat(victim);        
+        window.socket.emit('hit', {
+          thrower: self.player,
+          ballId: self.id,
+          victim: victim
+        });
       }
     });
 
@@ -36,13 +41,13 @@ Ball.prototype.animateBall = function(){
   });
 }
 
-Ball.prototype.splat = function(playerId) {
+Ball.prototype.splat = function(victim) {
   this.$ball
     .css("background-image", "url('/images/splat.png')") 
     .css("width", "14px")
     .css("height", "14px");
   delete _balls[this.id];
-  return _players[playerId].hit();
+  return _players[this.player.id].hit(victim);
 }
 
 Ball.prototype.getDirection = function(){

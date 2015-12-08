@@ -18,16 +18,15 @@ socket.on('playerStop', playerStop);
 socket.on('ballThrown', ballThrown);
 socket.on('hit', hit);
 
-function hit(playerId, ballId){
-  console.log(playerId, ballId)
-  // var ball = _balls[ballId];
-  // ball.$ball
-  var ball = $("#"+ballId);
+function hit(data){
+  var ball = $("#"+data.ballId);
   ball
     .css("background-image", "url('/images/splat.png')") 
     .css("width", "14px")
     .css("height", "14px");
-  return _players[playerId].hit();
+
+  var player = data.thrower;
+  return _players[player.id].hit(data.victim);
 }
 
 function choosePlayer(){
@@ -44,6 +43,7 @@ function choosePlayer(){
   }
 
   localPlayer = new Player(name, team, localPlayer.socketId, true);
+  _players[localPlayer.id] = localPlayer;
   socket.emit('newPlayer', localPlayer);
   $("#chooseCharacter").empty();
   $(".scores").show();
