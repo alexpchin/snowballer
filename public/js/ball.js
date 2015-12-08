@@ -15,7 +15,7 @@ function Ball(id, x, y, direction, player) {
 Ball.prototype.animateBall = function(){
   var animation  = this.getDirection();
   var self = this;
-  this.$ball.show().animate(animation, 600, "linear", function() {
+  this.$ball.show().animate(animation, 400, "linear", function() {
     var bx = self.$ball.css("left");
     var by = self.$ball.css("top");
 
@@ -23,10 +23,10 @@ Ball.prototype.animateBall = function(){
       var px = _players[id].x;
       var py = _players[id].y;
 
-      if (parseInt(bx) <= parseInt(px)+15 &&
-          parseInt(bx) >= parseInt(px)-15 &&
-          parseInt(by) <= parseInt(py)+15 &&
-          parseInt(by) >= parseInt(py)-15) {
+      if (parseInt(bx) <= parseInt(px)+20 &&
+          parseInt(bx) >= parseInt(px)-20 &&
+          parseInt(by) <= parseInt(py)+20 &&
+          parseInt(by) >= parseInt(py)-20) {
         self.splat();        
         window.socket.emit('hit', self.id);
       }
@@ -54,10 +54,16 @@ Ball.prototype.getDirection = function(){
       return { top: "-=100" };
       break;
     case "left":
-      return { left: "-=100" };
+      return { 
+        left: "-=100",
+        top: "+=15" 
+      };
       break;
     case "right":
-      return { left: "+=100" };
+      return { 
+        left: "+=100",
+        top: "+=15"
+      };
       break;
   }
 }
@@ -65,7 +71,7 @@ Ball.prototype.getDirection = function(){
 Ball.prototype.disappear = function(){
   var ball = this;
   return setTimeout(function(){
-    ball.$ball.fadeOut("200", function(){
+    ball.$ball.fadeOut("100", function(){
       ball.$ball.remove();
     });
   }, 1000);

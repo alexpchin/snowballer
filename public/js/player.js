@@ -62,7 +62,8 @@ Player.prototype.throwBall = function(){
   var x = parseInt(this.x)+10 + "px";
   var y = parseInt(this.y)+10 + "px";
   var direction = this.getDirection(this.classList);
-  var ball = new Ball(new Date().valueOf(), x, y, direction, this);
+  var id = new Date().valueOf();
+  var ball = new Ball(id, x, y, direction, this);
   return window.socket.emit('ballThrown', ball);
 }
 
@@ -167,7 +168,9 @@ Player.prototype.makeMoves = function(direction){
   return window.socket.emit('updatePosition', player);
 }
 
-Player.prototype.hit = function(ball){
+Player.prototype.hit = function(){
+  $("#"+this.team).text(parseInt($("#"+this.team).text())+1);
+  
   console.log("REDUCING HP");
   this.hp -= 10;
   if (this.hp === 0) { return this.character.fadeOut("200");

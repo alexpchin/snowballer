@@ -38,6 +38,11 @@ p {
   clear: both;
 }
 
+.error {
+  display: none;
+  color: red;
+}
+
 input[type=text], input[type=submit] {
   font-family: 'Cutive Mono';
   border: 1px solid black;
@@ -83,6 +88,19 @@ label > input + img {
 
 label > input:checked + img {
   border: 1px solid black;
+}
+
+/*scores*/
+
+.scores {
+  display: none;
+  border: 1px solid black;
+  margin: 0 20px;
+  padding: 10px 0;
+}
+
+#alex, #gerry {
+  font-size: 30px;
 }
 
 /*stage*/

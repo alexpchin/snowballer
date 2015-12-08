@@ -24,23 +24,35 @@ function hit(ballId){
     .css("background-image", "url('/images/splat.png')") 
     .css("width", "14px")
     .css("height", "14px");
-  console.log(ball);
+  return _players[ball.player.id].hit();
 }
 
 function choosePlayer(){
   event.preventDefault();
+  $(".error").hide();
   var team = $(this).find("input[type=radio][name=character]:checked").val();
   var name = $(this).find("input[name=name]").val();
+  if (name.length > 10) {
+    $(".error").text("Please choose a shorter name!").slideDown();
+    return false;
+  } else if (name.length < 3) {
+    $(".error").text("Please choose a longer name!").slideDown();
+    return false;
+  }
+
   localPlayer = new Player(name, team, localPlayer.socketId, true);
   socket.emit('newPlayer', localPlayer);
   $("#chooseCharacter").empty();
+  $(".scores").show();
 }
 
 function connect(){
   return localPlayer.socketId = socket.io.engine.id;
 }
 
-function players(players) {
+function players(game) {
+  // Add players
+  var players = game.players;
   Object.keys(players).forEach(function(id){
     var name = players[id].name;
     var x    = players[id].x;
@@ -49,6 +61,11 @@ function players(players) {
     var classList = players[id].classList
     return _players[id] = new Player(name, team, id, false, x, y, classList);
   });
+
+  // Update scores
+  console.log(game)
+  $("#gerry").text(game.scores["gerry"]);
+  $("#alex").text(game.scores["alex"]);
 }
 
 function joined(player) {

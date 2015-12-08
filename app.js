@@ -9,10 +9,16 @@ var server = app.listen(8000, function() {
 });
 
 var io = require('socket.io')(server);
-var players = {};
+var game = {
+  players: {},
+  scores: {
+    gerry: 0,
+    alex: 0
+  }
+};
 
 io.on('connection', function(client) {
-  client.emit('players', players);
+  client.emit('players', game);
   client.on('newPlayer', newPlayer);
   client.on('playerMove', playerMove);
   client.on('playerStop', playerStop);
@@ -22,17 +28,16 @@ io.on('connection', function(client) {
   client.on('hit', hit);
 
   function hit(ballId){
-    console.log("hit")
     return client.broadcast.emit('hit', ballId);
   }
 
   function newPlayer(player) {
-    players[player.id] = player;
+    game.players[player.id] = player;
     return client.broadcast.emit('joined', player);
   }
 
   function playerMove(player) {
-    players[player.id] = player;
+    game.players[player.id] = player;
     return client.broadcast.emit("playerMove", player);
   }
 
@@ -41,7 +46,7 @@ io.on('connection', function(client) {
   }
 
   function updatePosition(player){
-    return players[player.id] = player;
+    return game.players[player.id] = player;
   }
 
   function ballThrown(ball){
@@ -49,7 +54,7 @@ io.on('connection', function(client) {
   }
 
   function leaveGame(playerId) {
-    delete players[playerId];
+    delete game.players[playerId];
     return client.broadcast.emit("left", playerId);
   }
 });
