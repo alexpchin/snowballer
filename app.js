@@ -1,10 +1,10 @@
 var express = require('express');
 var app     = express();
+var port    = process.env.PORT || 8000;
 
 app.use(express.static(__dirname + '/public'));
 
-var server = app.listen(8000, function() {
-	var port = server.address().port;
+var server = app.listen(port, function() {
 	console.log('Server running at port %s', port);
 });
 
