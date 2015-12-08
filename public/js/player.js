@@ -169,7 +169,6 @@ Player.prototype.makeMoves = function(direction){
 }
 
 Player.prototype.hit = function(victim){
-  // console.log(this.id, _players[victim.id].character);
   if (this.team !== victim.team) {
     $("#"+this.team).text(parseInt($("#"+this.team).text())+1);
   }

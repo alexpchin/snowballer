@@ -6,7 +6,6 @@ function Ball(id, x, y, direction, player) {
   this.direction = direction;
   this.$ball     = $("<div id='"+this.id+"' class='snowball'></div>");
   this.$stage    = $("#stage");
-
   this.$ball.css("left", x).css("top", y);
   this.$stage.append(this.$ball);
   this.animateBall();

@@ -16,6 +16,7 @@ var game = {
     alex: 0
   }
 };
+console.log(game.scores);
 
 io.on('connection', function(client) {
   client.emit('players', game);
